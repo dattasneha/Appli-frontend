@@ -3,49 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const API_BASE = "https://appli-oc5h.onrender.com";
-
 export default function LoginPage() {
+  const [role, setRole] = useState<"user" | "admin">("user");
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
 
-    try {
-      const res = await fetch(`${API_BASE}/appli/v1/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Invalid email or password");
-      }
-
-      const data = await res.json();
-
-      // Save token
-      localStorage.setItem("access_token", data.access_token);
-
-      // Redirect (you can change later if backend sends role)
-      router.push("/dashboard/user");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
+    if (role === "admin") router.push("/dashboard/admin");
+    else router.push("/dashboard/user");
   };
 
   return (
@@ -58,34 +24,54 @@ export default function LoginPage() {
           Welcome Back
         </h2>
 
-        {error && (
-          <p className="mb-4 text-red-500 text-sm text-center">{error}</p>
-        )}
+        {/* Role Switch */}
+        <div className="flex items-center justify-center mb-8 bg-zinc-100 dark:bg-zinc-800 rounded-full p-1">
+          <button
+            type="button"
+            onClick={() => setRole("user")}
+            className={`w-1/2 py-2 rounded-full transition font-medium ${
+              role === "user"
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-zinc-600 dark:text-zinc-400"
+            }`}
+          >
+            User
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole("admin")}
+            className={`w-1/2 py-2 rounded-full transition font-medium ${
+              role === "admin"
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-zinc-600 dark:text-zinc-400"
+            }`}
+          >
+            Admin
+          </button>
+        </div>
 
+        {/* Email */}
         <input
           type="email"
           placeholder="Email address"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           className="w-full mb-4 px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
         />
 
+        {/* Password */}
         <input
           type="password"
           placeholder="Password"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           className="w-full mb-6 px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
         />
 
+        {/* Submit */}
         <button
           type="submit"
-          disabled={loading}
-          className="w-full py-3 rounded-lg bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 transition font-medium disabled:opacity-50"
+          className="w-full py-3 rounded-lg bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 transition font-medium"
         >
-          {loading ? "Logging in..." : "Login"}
+          Login as {role === "admin" ? "Admin" : "User"}
         </button>
 
         <p className="text-center text-zinc-500 dark:text-zinc-400 mt-6 text-sm">
