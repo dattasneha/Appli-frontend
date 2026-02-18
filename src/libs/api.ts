@@ -25,6 +25,13 @@ export interface AuthResponse {
   token_type: string;
 }
 
+export interface Job {
+  id: number;
+  title: string;
+  description: string;
+  is_active: boolean;
+}
+
 class ApiError extends Error {
   status: number;
   data: unknown;
@@ -108,4 +115,15 @@ export function isTokenExpired(token: string): boolean {
   return decoded.exp * 1000 < Date.now();
 }
 
+
+export async function jobs(params: void): Promise<Job[]> {
+  const response = await fetch("/api/jobs",{
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  });
+  return handleResponse<Job[]>(response);
+}
 export { ApiError };
