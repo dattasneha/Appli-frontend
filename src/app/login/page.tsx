@@ -20,9 +20,11 @@ export default function LoginPage() {
 
     try {
       const loggedInUser = await login({ email, password });
+      console.log("Logged in user:", loggedInUser?.user);
       // Redirect based on user role from JWT
-      const role = loggedInUser?.role || "user";
-      if (role === "admin") {
+      const userRole = loggedInUser?.user.role || "user";
+    
+      if (userRole === "admin") {
         router.push("/dashboard/admin");
       } else {
         router.push("/dashboard/user");
@@ -36,6 +38,7 @@ export default function LoginPage() {
     } finally {
       setIsSubmitting(false);
     }
+    
   };
 
   return (

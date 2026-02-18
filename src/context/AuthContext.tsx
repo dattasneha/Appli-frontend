@@ -21,10 +21,13 @@ import {
 } from "@/libs/api";
 
 interface User {
-  email: string;
-  role: string;
-  name?: string;
-  [key: string]: unknown;
+  access_token: string;
+  user:{
+    email: string;
+    name: string;
+    role: string;
+    Applications?: unknown[];
+  }
 }
 
 interface AuthContextType {

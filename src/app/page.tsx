@@ -94,13 +94,13 @@ export default function Home() {
             jobList.map((job) => (
               <div
                 key={job.id}
-                className="p-6 bg-white dark:bg-zinc-900 rounded-lg shadow hover:shadow-md transition-shadow"
+                className="p-3 bg-white dark:bg-zinc-900 rounded-lg shadow hover:shadow-md transition-shadow"
               >
                 <h2 className="text-xl font-semibold text-black dark:text-zinc-50">
                   {job.title}
                 </h2>
 
-                <p className="text-zinc-600 dark:text-zinc-400">
+                <p className="text-zinc-600 dark:text-zinc-400 line-clamp-1">
                   {job.description}
                 </p>
 

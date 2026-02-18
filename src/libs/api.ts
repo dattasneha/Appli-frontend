@@ -1,3 +1,5 @@
+import { UUID } from "crypto";
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -22,7 +24,18 @@ export interface ValidationError {
 
 export interface AuthResponse {
   access_token: string;
-  token_type: string;
+  user:{
+    id:UUID;
+    email: string;
+    name: string;
+    role: string;
+    Applications?: unknown[];
+  }
+}
+export interface JobRequest{
+  title: string;
+  description: string;
+  is_active: boolean;
 }
 
 export interface Job {
@@ -120,10 +133,20 @@ export async function jobs(params: void): Promise<Job[]> {
   const response = await fetch("/api/jobs",{
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getAuthToken()}`,
+      "Content-Type": "application/json"
     },
   });
   return handleResponse<Job[]>(response);
+}
+export async function createJob(data: JobRequest): Promise<Job> {
+  const response = await fetch("/api/admin/jobs",{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse<Job>(response);
 }
 export { ApiError };
