@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+
 
 interface Application {
   id: number;
@@ -16,6 +19,8 @@ interface Job {
 }
 
 export default function AdminDashboard() {
+
+  const router = useRouter();
   const [applications, setApplications] = useState<Application[]>([
     { id: 1, user: "John Doe", job: "Frontend Developer", status: "Pending" },
     { id: 2, user: "Jane Smith", job: "Backend Engineer", status: "Pending" },
@@ -26,7 +31,7 @@ export default function AdminDashboard() {
     { id: 2, title: "UI/UX Designer", active: true },
   ]);
 
-  // ----- Application actions -----
+
   const updateStatus = (id: number, status: Application["status"]) => {
     setApplications((prev) =>
       prev.map((app) =>
@@ -35,7 +40,6 @@ export default function AdminDashboard() {
     );
   };
 
-  // ----- Job actions -----
   const closeJob = (id: number) => {
     setJobs((prev) =>
       prev.map((job) =>
@@ -58,6 +62,7 @@ export default function AdminDashboard() {
         <nav className="flex items-center justify-between p-5 bg-white dark:bg-black shadow-md">
         <div className="flex gap-4">
           <button
+            onClick={()=>router.push("/admin/jobs/create")}
             className="px-4 py-2 rounded-md border border-zinc-900 dark:border-zinc-50"
           >
             Create Job

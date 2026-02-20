@@ -14,6 +14,9 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify(body),
 
         });
+
+        const data = await response.json();
+        return NextResponse.json(data,{status:response.status});
     }catch(error){
         console.error("Create job proxy error:",error);
         return NextResponse.json({detail:[{msg:"Failed to connect to server"}]},{status:500});

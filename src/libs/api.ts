@@ -76,6 +76,7 @@ export async function login(data: LoginRequest): Promise<AuthResponse> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
+    credentials: "include"      
   });
   return handleResponse<AuthResponse>(response);
 }

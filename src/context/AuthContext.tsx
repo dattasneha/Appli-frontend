@@ -53,7 +53,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
-  // Initialize auth state from localStorage
   useEffect(() => {
     const storedToken = getAuthToken();
     if (storedToken && !isTokenExpired(storedToken)) {
@@ -63,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(decoded);
       }
     } else if (storedToken) {
-      // Token expired, clean up
+    
       removeAuthToken();
     }
     setIsLoading(false);
